@@ -40,7 +40,7 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
     boolean hasAchievementOfType(@Param("user") User user,
                                  @Param("criteriaType") AchievementCriteria criteriaType);
 
-    // Get the most recently earned achievements for a user (for activity feed)
+    // Get the most recently earned achievements for a user
     List<UserAchievement> findTop5ByUserOrderByEarnedAtDesc(User user);
 
 
