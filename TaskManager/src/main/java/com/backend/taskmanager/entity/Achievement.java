@@ -49,7 +49,7 @@ public class Achievement {
 }
 
 // Enum for achievement criteria types
-enum AchievementCriteria {
+public enum AchievementCriteria {
     TASKS_COMPLETED,
     TOTAL_POINTS,
     STREAK_DAYS,
