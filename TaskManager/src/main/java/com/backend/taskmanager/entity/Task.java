@@ -67,14 +67,14 @@ public class Task {
 }
 
 // Enums for task status and priority
-enum TaskStatus {
+public enum TaskStatus {
     PENDING,
     IN_PROGRESS,
     COMPLETED,
     CANCELLED
 }
 
-enum Priority {
+public enum Priority {
     LOW,
     MEDIUM,
     HIGH,

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.management.relation.Role;
 import java.util.Optional;
 
 @Repository
@@ -27,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Get top users by points for leaderboard
     @Query("SELECT u FROM User u ORDER BY u.totalPoints DESC")
     Page<User> findTopUsersByPoints(Pageable pageable);
+
+    long countByRole(Role role);
+
 }
