@@ -95,10 +95,11 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
 
 // Enum for user roles
-enum Role {
+public enum Role {
     EMPLOYEE,
     MANAGER,
     ADMIN

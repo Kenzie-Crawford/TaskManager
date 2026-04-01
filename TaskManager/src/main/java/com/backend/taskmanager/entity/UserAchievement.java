@@ -33,4 +33,5 @@ public class UserAchievement {
     protected void onCreate() {
         earnedAt = LocalDateTime.now();
     }
+
 }
