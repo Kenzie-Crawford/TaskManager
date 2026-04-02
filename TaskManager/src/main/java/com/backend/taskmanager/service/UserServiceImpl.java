@@ -48,4 +48,19 @@ public class UserServiceImpl implements UserService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+
+    // ===== ADD THIS MISSING METHOD =====
+    @Override
+    public User addPoints(Long userId, int points) {
+        User user = findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        user.setTotalPoints(user.getTotalPoints() + points);
+
+        // Update level: every 100 points = 1 level
+        int newLevel = (user.getTotalPoints() / 100) + 1;
+        user.setLevel(newLevel);
+
+        return userRepository.save(user);
+    }
 }

@@ -16,5 +16,7 @@ public interface UserService {
     List<User> findByRole(Role role);
     User save(User user);
     void deleteById(Long id);
+    User addPoints(Long userId, int points);
+
 
 }
