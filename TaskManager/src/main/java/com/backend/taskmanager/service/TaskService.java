@@ -10,14 +10,13 @@ import java.util.Optional;
 
 public interface TaskService {
 
-    // ===== Basic CRUD Operations =====
+
     List<Task> getAllTasks();
     Optional<Task> findById(Long id);
     Task createTask(Task task);
     Task updateTask(Long id, Task task);
     void deleteTask(Long id);
 
-    // ===== Query Methods =====
     List<Task> findByAssignedTo(User user);
     List<Task> findByAssignedToId(Long userId);
     List<Task> findByStatus(TaskStatus status);
@@ -27,7 +26,7 @@ public interface TaskService {
     long countByAssignedToAndStatus(User user, TaskStatus status);
     List<Task> findActiveTasksByUser(Long userId);
 
-    // ===== Task Operations =====
+
     Task assignTask(Long taskId, Long userId);
     Task completeTask(Long taskId, Long userId);
 }
