@@ -1,7 +1,6 @@
 package com.backend.taskmanager.service;
 
 import com.backend.taskmanager.entity.User;
-import com.backend.taskmanager.entity.Role;
 import com.backend.taskmanager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findByRole(Role role) {
+    public List<User> findByRole(Role.Role role) {
         return userRepository.findByRole(role);
     }
 

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.backend.taskmanager.entity.Role;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +29,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u ORDER BY u.totalPoints DESC")
     Page<User> findTopUsersByPoints(Pageable pageable);
 
-    long countByRole(Role role);
+    long countByRole(Role.Role role);
 
-    List<User> findByRole (Role role);
+    List<User> findByRole (Role.Role role);
 
 }

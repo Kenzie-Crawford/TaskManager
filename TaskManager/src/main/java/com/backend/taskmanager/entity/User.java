@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import static com.backend.taskmanager.entity.Role.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(nullable = false, unique = true, length = 50)
@@ -39,7 +40,7 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = Role.EMPLOYEE;
+    private Role role = EMPLOYEE;
 
     @Column(name = "total_points")
     private Integer totalPoints = 0;
@@ -99,11 +100,4 @@ public class User implements UserDetails {
         return true;
     }
 
-}
-
-// Enum for user roles
-public enum Role {
-    EMPLOYEE,
-    MANAGER,
-    ADMIN
 }
