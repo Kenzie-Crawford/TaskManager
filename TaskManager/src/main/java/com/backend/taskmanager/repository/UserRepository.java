@@ -1,5 +1,6 @@
 package com.backend.taskmanager.repository;
 
+import com.backend.taskmanager.entity.Role;
 import com.backend.taskmanager.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,8 +30,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u ORDER BY u.totalPoints DESC")
     Page<User> findTopUsersByPoints(Pageable pageable);
 
-    long countByRole(Role.Role role);
+    long countByRole(Role role);
 
-    List<User> findByRole (Role.Role role);
+    List<User> findByRole (Role role);
 
 }

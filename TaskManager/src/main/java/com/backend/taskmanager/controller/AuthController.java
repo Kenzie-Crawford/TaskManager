@@ -1,53 +1,38 @@
 package com.backend.taskmanager.controller;
 
+import com.backend.taskmanager.dto.RegisterRequest;
+import com.backend.taskmanager.dto.RegisterResponse;
 import com.backend.taskmanager.entity.User;
 import com.backend.taskmanager.dto.LoginRequest;
-import com.backend.taskmanager.repository.UserRepository;
-import com.backend.taskmanager.service.AuthService;
+import com.backend.taskmanager.service.AuthServiceImpl;
+import com.backend.taskmanager.service.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserRepository userRepository;
+    private final AuthServiceImpl authService;
+    private final UserServiceImpl userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository){
-        this.authenticationManager = authenticationManager;
-        this.userRepository = userRepository;
-    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
         try {
-            Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-            );
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(auth);
-            SecurityContextHolder.setContext(context);
-
-            HttpSession session = httpRequest.getSession(true);
-            session.setAttribute(
-                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
-
-            User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+            var currentUser = userService.login(request, httpRequest);
             return ResponseEntity.ok(Map.of(
-                    "id", user.getId(),
-                    "name", user.getName(),
-                    "email", user.getEmail()
+                    "id", currentUser.getId(),
+                    "name", currentUser.getName(),
+                    "email", currentUser.getEmail()
             ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
@@ -66,22 +51,43 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?> currentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())) {
-            return ResponseEntity.status(401).body(Map.of("error", "Not authenticated"));
-        }
 
-        String email = auth.getName();
-        User user = userRepository.findByEmail(email).orElse(null);
-        if (user == null) {
-            return ResponseEntity.status(401).body(Map.of("error", "User not found"));
-        }
+        var user = userService.getCurrentUser();
 
-        return ResponseEntity.ok(Map.of(
-                "id", user.getId(),
-                "name", user.getName(),
-                "email", user.getEmail()
-        ));
+        if(user != null) {
+            return ResponseEntity.ok(Map.of(
+                    "id", user.getId(),
+                    "name", user.getName(),
+                    "email", user.getEmail()
+            ));
+        } else {
+           return ResponseEntity.status(401).body(Map.of("error", "Not authenticated"));
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
+        try {
+            User newUser = authService.register(request);
+
+            RegisterResponse response = RegisterResponse.builder()
+                    .success(true)
+                    .message("Registration successful! Please login.")
+                    .userId(newUser.getId())
+                    .username(newUser.getUsername())
+                    .email(newUser.getEmail())
+                    .role(newUser.getRole().name())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (RuntimeException e) {
+            RegisterResponse response = RegisterResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        }
     }
         }
 
