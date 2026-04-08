@@ -102,4 +102,27 @@ public class UserServiceImpl implements UserService {
         String email = auth.getName();
         return userRepository.findByEmail(email).orElse(null);
     }
+    @Override
+    public User updateUser(Long id, User userDetails) {
+        User existingUser = findById(id)
+                .orElseThrow(()-> new RuntimeException("User not found with id: "+ id));
+        if (userDetails.getUsername() != null) {
+            existingUser.setUsername(userDetails.getUsername());
+        }
+        if (userDetails.getEmail() != null) {
+            existingUser.setEmail(userDetails.getEmail());
+        }
+        if (userDetails.getName() != null) {
+            existingUser.setName(userDetails.getName());
+        }
+        if (userDetails.getRole() != null) {
+            existingUser.setRole(userDetails.getRole());
+        }
+        if (userDetails.getPassword() != null) {
+            // Password should be encoded before setting!
+            existingUser.setPassword(userDetails.getPassword());
+        }
+
+        return userRepository.save(existingUser);
+    }
 }

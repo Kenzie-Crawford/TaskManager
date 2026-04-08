@@ -20,4 +20,5 @@ public interface UserService {
     User addPoints(Long userId, int points);
     User login(LoginRequest request, HttpServletRequest httpRequest);
     User getCurrentUser();
+    User updateUser(Long id,User userDetails );
 }

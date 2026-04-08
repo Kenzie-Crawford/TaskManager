@@ -1,11 +1,13 @@
 package com.backend.taskmanager.controller;
 
+import com.backend.taskmanager.dto.LoginResponse;
 import com.backend.taskmanager.dto.RegisterRequest;
 import com.backend.taskmanager.dto.RegisterResponse;
 import com.backend.taskmanager.entity.User;
 import com.backend.taskmanager.dto.LoginRequest;
-import com.backend.taskmanager.service.AuthServiceImpl;
-import com.backend.taskmanager.service.UserServiceImpl;
+import com.backend.taskmanager.security.JwtTokenProvider;
+import com.backend.taskmanager.service.AuthService;
+import com.backend.taskmanager.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,20 +24,36 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthServiceImpl authService;
-    private final UserServiceImpl userService;
+    private final AuthService authService;
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         try {
-            var currentUser = userService.login(request, httpRequest);
-            return ResponseEntity.ok(Map.of(
-                    "id", currentUser.getId(),
-                    "name", currentUser.getName(),
-                    "email", currentUser.getEmail()
-            ));
+            User user = authService.login(request);
+            String token = jwtTokenProvider.generateToken(user);
+            LoginResponse response = LoginResponse.builder()
+                    .success(true)
+                    .token(token)
+                    .tokenType("Bearer")
+                    .userId(user.getId())
+                    .username(user.getUsername())
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .role(user.getRole().name())
+                    .totalPoints(user.getTotalPoints())
+                    .level(user.getLevel())
+                    .build();
+            return ResponseEntity.ok(response);
+
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body(Map.of("error", "Invalid credentials"));
+            LoginResponse errorResponse = LoginResponse.builder()
+                    .success(false)
+                    .message("Invalid username or password")
+                    .build();
+
+            return ResponseEntity.status(401).body(errorResponse);
         }
     }
 
@@ -54,41 +72,46 @@ public class AuthController {
 
         var user = userService.getCurrentUser();
 
-        if(user != null) {
+        if (user != null) {
             return ResponseEntity.ok(Map.of(
                     "id", user.getId(),
                     "name", user.getName(),
                     "email", user.getEmail()
+
             ));
         } else {
-           return ResponseEntity.status(401).body(Map.of("error", "Not authenticated"));
+            return ResponseEntity.status(401).body(Map.of("error", "Not authenticated"));
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
-        try {
-            User newUser = authService.register(request);
+        System.out.println("Username: " + request.getUsername());
+        {
+            try {
+                User newUser = authService.register(request);
 
-            RegisterResponse response = RegisterResponse.builder()
-                    .success(true)
-                    .message("Registration successful! Please login.")
-                    .userId(newUser.getId())
-                    .username(newUser.getUsername())
-                    .email(newUser.getEmail())
-                    .role(newUser.getRole().name())
-                    .build();
+                RegisterResponse response = RegisterResponse.builder()
+                        .success(true)
+                        .message("Registration successful! Please login.")
+                        .userId(newUser.getId())
+                        .username(newUser.getUsername())
+                        .email(newUser.getEmail())
+                        .name(newUser.getName())
+                        .role(newUser.getRole().name())
+                        .build();
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
-        } catch (RuntimeException e) {
-            RegisterResponse response = RegisterResponse.builder()
-                    .success(false)
-                    .message(e.getMessage())
-                    .build();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            } catch (RuntimeException e) {
+                RegisterResponse response = RegisterResponse.builder()
+                        .success(false)
+                        .message(e.getMessage())
+                        .build();
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
         }
     }
-        }
+}
 
 

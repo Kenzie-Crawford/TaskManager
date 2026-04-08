@@ -1,11 +1,9 @@
 package com.backend.taskmanager.controller;
 
 
-import com.backend.taskmanager.entity.Achievement;
-import com.backend.taskmanager.entity.UserAchievement;
-import com.backend.taskmanager.entity.User;
+import com.backend.taskmanager.entity.*;
 import com.backend.taskmanager.service.UserService;
-import com.backend.taskmanager.entity.AchievementCriteria;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -46,6 +44,57 @@ public class UserController {
         return userService.findByUsername(username)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<User>> getUsersByRole(@PathVariable String role) {
+        try {
+            Role userRole = Role.valueOf(role.toUpperCase());
+            List<User> users = userService.findByRole(userRole);
+            return ResponseEntity.ok(users);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+            User savedUser = userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        try{
+                User updatedUser = userService.updateUser(id, userDetails);
+                return ResponseEntity.ok(updatedUser);
+            } catch (RuntimeException e) {
+                return ResponseEntity.notFound().build();
+            }
+        }
+
+
+    @PutMapping("/{id}/points")
+    public ResponseEntity<User> addPoints(@PathVariable Long id, @RequestParam int points) {
+        try {
+            User updatedUser = userService.addPoints(id, points);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class LoginResponse {
+    private String message;
     private String token;
     private String tokenType = "Bearer";
     private Long userId;
@@ -16,6 +17,8 @@ public class LoginResponse {
     private String role;
     private Integer totalPoints;
     private Integer level;
+    private boolean success;
+    private String name;
 
 
 }

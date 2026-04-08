@@ -48,6 +48,7 @@ import org.springframework.stereotype.Service;
             User user = new User();
             user.setUsername(request.getUsername());
             user.setEmail(request.getEmail());
+            user.setName(request.getName());  // ← CRITICAL: This MUST be here!
             user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setRole(Role.EMPLOYEE);
             user.setTotalPoints(0);
