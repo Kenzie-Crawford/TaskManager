@@ -1,5 +1,6 @@
 package com.backend.taskmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,7 @@ public class User implements UserDetails {
     private List<Task> createdTasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<UserAchievement> achievements = new ArrayList<>();
 
     @PrePersist

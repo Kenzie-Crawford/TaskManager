@@ -1,5 +1,6 @@
 package com.backend.taskmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +41,7 @@ public class Achievement {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "achievement")
+    @JsonIgnore
     private List<UserAchievement> userAchievements = new ArrayList<>();
 
     @PrePersist

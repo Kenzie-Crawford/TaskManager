@@ -1,5 +1,6 @@
 package com.backend.taskmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,12 @@ public class UserAchievement {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "achievement_id", nullable = false)
+    @JsonIgnore
     private Achievement achievement;
 
     @Column(name = "earned_at")
