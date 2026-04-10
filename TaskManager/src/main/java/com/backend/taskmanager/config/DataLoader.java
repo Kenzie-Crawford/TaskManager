@@ -31,7 +31,6 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("        DATA LOADER STARTED             ");
         System.out.println("========================================");
 
-        // Load data in correct order (achievements first, then users, then tasks, then links)
         loadAchievements();
         loadUsers();
         loadTasks();
@@ -42,9 +41,6 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("========================================");
     }
 
-    // ============================================================
-    // 1. LOAD ACHIEVEMENTS
-    // ============================================================
     private void loadAchievements() {
         if (achievementRepository.count() > 0) {
             System.out.println("⚠️ Achievements already exist - skipping");
@@ -62,25 +58,17 @@ public class DataLoader implements CommandLineRunner {
                         AchievementCriteria.TOTAL_POINTS, 500, "⭐"),
                 createAchievement("Point Legend", "Earn 1000 points",
                         AchievementCriteria.TOTAL_POINTS, 1000, "🌟🌟🌟"),
-                createAchievement("Streak Keeper", "Complete tasks 5 days in a row",
-                        AchievementCriteria.STREAK_DAYS, 5, "🔥"),
-                createAchievement("Speed Demon", "Complete 3 high-priority tasks in one day",
-                        AchievementCriteria.HIGH_PRIORITY_DAILY, 3, "⚡"),
-                createAchievement("Team Player", "Get tasks from 3 different assigners",
-                        AchievementCriteria.UNIQUE_ASSIGNERS, 3, "🤝")
-
+                createAchievement("Achievement Hunter", "Earn 5 achievements",
+                        AchievementCriteria.ACHIEVEMENTS_COUNT, 5, "🏆🏆🏆")
         );
 
         achievementRepository.saveAll(achievements);
-        System.out.println("Loaded " + achievements.size() + " achievements");
+        System.out.println("✅ Loaded " + achievements.size() + " achievements");
     }
 
-    // ============================================================
-    // 2. LOAD USERS
-    // ============================================================
     private void loadUsers() {
         if (userRepository.count() > 0) {
-            System.out.println("Users already exist - skipping");
+            System.out.println("⚠️ Users already exist - skipping");
             return;
         }
 
@@ -100,8 +88,8 @@ public class DataLoader implements CommandLineRunner {
         );
 
         userRepository.saveAll(users);
-        System.out.println("Loaded " + users.size() + " users");
-        System.out.println("Credentials:");
+        System.out.println("✅ Loaded " + users.size() + " users");
+        System.out.println("   📝 Credentials:");
         System.out.println("      - john_doe / password123 (EMPLOYEE)");
         System.out.println("      - jane_smith / password123 (EMPLOYEE)");
         System.out.println("      - bob_wilson / password123 (EMPLOYEE)");
@@ -109,25 +97,21 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("      - admin_user / admin123 (ADMIN)");
     }
 
-    // ============================================================
-    // 3. LOAD TASKS
-    // ============================================================
     private void loadTasks() {
         if (taskRepository.count() > 0) {
-            System.out.println("Tasks already exist - skipping");
+            System.out.println("⚠️ Tasks already exist - skipping");
             return;
         }
 
         System.out.println("\n📋 Loading Tasks...");
 
-        // Get user references
         User john = userRepository.findByUsername("john_doe").orElse(null);
         User jane = userRepository.findByUsername("jane_smith").orElse(null);
         User bob = userRepository.findByUsername("bob_wilson").orElse(null);
         User alice = userRepository.findByUsername("alice_manager").orElse(null);
 
         if (john == null || jane == null || bob == null || alice == null) {
-            System.out.println("Error: Users not found - cannot create tasks");
+            System.out.println("❌ Error: Users not found - cannot create tasks");
             return;
         }
 
@@ -174,22 +158,16 @@ public class DataLoader implements CommandLineRunner {
         );
 
         taskRepository.saveAll(tasks);
-        System.out.println("Loaded " + tasks.size() + " tasks");
-        System.out.println("      - " + tasks.stream().filter(t -> t.getStatus() == TaskStatus.COMPLETED).count() + " completed");
-        System.out.println("      - " + tasks.stream().filter(t -> t.getStatus() == TaskStatus.PENDING).count() + " pending");
-        System.out.println("      - " + tasks.stream().filter(t -> t.getStatus() == TaskStatus.IN_PROGRESS).count() + " in progress");
+        System.out.println("✅ Loaded " + tasks.size() + " tasks");
     }
 
-    // ============================================================
-    // 4. LOAD USER-ACHIEVEMENT RELATIONSHIPS
-    // ============================================================
     private void loadUserAchievements() {
         if (userAchievementRepository.count() > 0) {
-            System.out.println("User achievements already exist - skipping");
+            System.out.println("⚠️ User achievements already exist - skipping");
             return;
         }
 
-        System.out.println("\nLoading User Achievements...");
+        System.out.println("\n🏆 Loading User Achievements...");
 
         User john = userRepository.findByUsername("john_doe").orElse(null);
         User jane = userRepository.findByUsername("jane_smith").orElse(null);
@@ -197,7 +175,7 @@ public class DataLoader implements CommandLineRunner {
         Achievement pointHunter = achievementRepository.findByName("Point Hunter").orElse(null);
 
         if (john == null || jane == null || taskMaster == null) {
-            System.out.println("Users or achievements not found - skipping user achievements");
+            System.out.println("⚠️ Users or achievements not found - skipping");
             return;
         }
 
@@ -221,12 +199,10 @@ public class DataLoader implements CommandLineRunner {
             count++;
         }
 
-        System.out.println("Loaded " + count + " user-achievement relationships");
+        System.out.println("✅ Loaded " + count + " user-achievement relationships");
     }
 
-    // ============================================================
-    // HELPER METHODS
-    // ============================================================
+    // ===== HELPER METHODS =====
 
     private Achievement createAchievement(String name, String description,
                                           AchievementCriteria criteria, int value, String icon) {

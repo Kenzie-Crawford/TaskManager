@@ -43,4 +43,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("UPDATE Task t SET t.status = 'COMPLETED', t.completedAt = CURRENT_TIMESTAMP " +
             "WHERE t.id = :taskId AND t.assignedTo.id = :userId")
     int completeTask(@Param("taskId") Long taskId, @Param("userId") Long userId);
+
+    @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedTo.id = :userId AND t.status != 'COMPLETED'")
+    long countActiveTasksByUser(@Param("userId") Long userId);
 }

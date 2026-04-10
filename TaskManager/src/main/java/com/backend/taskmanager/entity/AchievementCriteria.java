@@ -6,5 +6,6 @@ public enum AchievementCriteria {
     TOTAL_POINTS,
     STREAK_DAYS,
     UNIQUE_ASSIGNERS,
-    HIGH_PRIORITY_DAILY
+    HIGH_PRIORITY_DAILY,
+    ACHIEVEMENTS_COUNT
 }

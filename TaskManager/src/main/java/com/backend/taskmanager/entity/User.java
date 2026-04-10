@@ -2,13 +2,14 @@ package com.backend.taskmanager.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import static com.backend.taskmanager.entity.Role.*;
+import com.backend.taskmanager.entity.Role;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -41,7 +43,7 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role = EMPLOYEE;
+    private Role role = Role.EMPLOYEE;
 
     @Column(name = "total_points")
     private Integer totalPoints = 0;
@@ -56,9 +58,11 @@ public class User implements UserDetails {
 
     // Relationships
     @OneToMany(mappedBy = "assignedTo", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Task> assignedTasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Task> createdTasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

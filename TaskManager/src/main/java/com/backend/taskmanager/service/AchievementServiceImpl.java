@@ -99,8 +99,6 @@ public class AchievementServiceImpl implements AchievementService {
         return Math.min(100, (currentValue * 100) / requiredValue);
     }
 
-    // ===== Private Helper Methods =====
-
     private boolean doesUserMeetCriteria(Long userId, Achievement achievement) {
         AchievementCriteria criteria = achievement.getCriteriaType();
         int requiredValue = achievement.getCriteriaValue();
@@ -117,6 +115,8 @@ public class AchievementServiceImpl implements AchievementService {
                 User user = userService.findById(userId)
                         .orElseThrow(() -> new RuntimeException("User not found"));
                 return user.getTotalPoints();
+            case ACHIEVEMENTS_COUNT:
+                return (int) countUserAchievements(userId);
             default:
                 return 0;
         }

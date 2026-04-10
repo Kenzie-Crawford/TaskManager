@@ -21,4 +21,5 @@ public interface UserService {
     User login(LoginRequest request, HttpServletRequest httpRequest);
     User getCurrentUser();
     User updateUser(Long id,User userDetails );
+    Optional <User> findByName(String name);
 }
