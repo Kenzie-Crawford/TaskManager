@@ -1,5 +1,6 @@
 package com.backend.taskmanager.controller;
 
+import com.backend.taskmanager.dto.TaskRequest;
 import com.backend.taskmanager.entity.Priority;
 import com.backend.taskmanager.entity.Task;
 import com.backend.taskmanager.entity.TaskStatus;
@@ -35,14 +36,14 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.createTask(task);
+    public Task createTask(@RequestBody TaskRequest request) {
+        return taskService.createTask(toTask(request));
     }
 
     @PutMapping ("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task taskDetails) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
         try {
-            Task updatedTask = taskService.updateTask(id, taskDetails);
+            Task updatedTask = taskService.updateTask(id, toTask(request));
             return ResponseEntity.ok(updatedTask);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -123,6 +124,46 @@ public class TaskController {
             return ResponseEntity.ok(completedTask);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    private Task toTask(TaskRequest request) {
+        Task task = new Task();
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setStatus(request.getStatus());
+        task.setPriority(request.getPriority());
+        task.setPoints(request.getPoints());
+        task.setDueDate(request.getDueDate());
+
+        if (request.getAssignedToId() != null) {
+            User assignedTo = new User();
+            assignedTo.setId(request.getAssignedToId());
+            task.setAssignedTo(assignedTo);
+        }
+
+        if (request.getCreatedById() != null) {
+            User createdBy = new User();
+            createdBy.setId(request.getCreatedById());
+            task.setCreatedBy(createdBy);
+        }
+
+        return task;
+    }
+    // Mission Board - View all unassigned tasks (any authenticated user)
+    @GetMapping("/mission-board")
+    public ResponseEntity<List<Task>> getMissionBoard() {
+        List<Task> unassignedTasks = taskService.getMissionBoardTasks();
+        return ResponseEntity.ok(unassignedTasks);
+    }
+    // Claim a task from mission board
+    @PatchMapping("/mission-board/{taskId}/claim")
+    public ResponseEntity<Task> claimTask(@PathVariable Long taskId, @RequestParam Long userId) {
+        try {
+            Task claimedTask = taskService.claimTask(taskId, userId);
+            return ResponseEntity.ok(claimedTask);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 

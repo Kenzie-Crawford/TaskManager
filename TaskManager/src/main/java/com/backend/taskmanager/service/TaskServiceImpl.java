@@ -37,11 +37,13 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new RuntimeException("Creator not found with id: " + task.getCreatedBy().getId()));
         task.setCreatedBy(creator);
 
-        // Handle assigned user if present
+        // Handle assigned user if present (can be null for mission board)
         if (task.getAssignedTo() != null && task.getAssignedTo().getId() != null) {
             User assignee = userService.findById(task.getAssignedTo().getId())
                     .orElseThrow(() -> new RuntimeException("Assignee not found with id: " + task.getAssignedTo().getId()));
             task.setAssignedTo(assignee);
+        } else {
+            task.setAssignedTo(null);  // Explicitly set to null for mission board
         }
 
         // Set default status if not set
@@ -213,4 +215,36 @@ public class TaskServiceImpl implements TaskService {
             throw new RuntimeException("Failed to complete task");
         }
     }
-}
+
+        @Override
+        public List<Task> getMissionBoardTasks() {
+            return taskRepository.findUnassignedTasks();
+        }
+
+        @Override
+        @Transactional
+        public Task claimTask(Long taskId, Long userId) {
+            // Get the unassigned task
+            Task task = findById(taskId)
+                    .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));
+
+            // Check if task is already assigned
+            if (task.getAssignedTo() != null) {
+                throw new RuntimeException("Task is already claimed by another user");
+            }
+
+            // Get the user claiming the task
+            User user = userService.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+            // Assign the task to this user
+            task.setAssignedTo(user);
+
+            // Change status to IN_PROGRESS when claimed
+            if (task.getStatus() == TaskStatus.PENDING) {
+                task.setStatus(TaskStatus.IN_PROGRESS);
+            }
+
+            return taskRepository.save(task);
+        }
+    }

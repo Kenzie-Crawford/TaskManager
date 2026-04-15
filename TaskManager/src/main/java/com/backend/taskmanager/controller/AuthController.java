@@ -70,7 +70,7 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<?> currentUser() {
 
-        var user = userService.getCurrentUser();
+        User user = userService.getCurrentUser();
 
         if (user != null) {
             return ResponseEntity.ok(Map.of(

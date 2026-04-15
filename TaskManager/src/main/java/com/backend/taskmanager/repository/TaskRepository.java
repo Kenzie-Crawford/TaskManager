@@ -37,7 +37,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
                                         @Param("startDate") LocalDateTime startDate,
                                         @Param("endDate") LocalDateTime endDate);
 
-    //  Update Method
     @Modifying
     @Transactional
     @Query("UPDATE Task t SET t.status = 'COMPLETED', t.completedAt = CURRENT_TIMESTAMP " +
@@ -46,4 +45,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("SELECT COUNT(t) FROM Task t WHERE t.assignedTo.id = :userId AND t.status != 'COMPLETED'")
     long countActiveTasksByUser(@Param("userId") Long userId);
+
+    @Query("SELECT t FROM Task t WHERE t.assignedTo IS NULL")
+    List<Task> findUnassignedTasks();
+
 }

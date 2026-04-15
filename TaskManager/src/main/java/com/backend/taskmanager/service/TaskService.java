@@ -29,4 +29,7 @@ public interface TaskService {
 
     Task assignTask(Long taskId, Long userId);
     Task completeTask(Long taskId, Long userId);
+
+    List<Task> getMissionBoardTasks();  // Get all unassigned tasks
+    Task claimTask(Long taskId, Long userId);
 }

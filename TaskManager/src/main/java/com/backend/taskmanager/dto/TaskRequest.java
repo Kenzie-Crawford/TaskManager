@@ -1,6 +1,7 @@
 package com.backend.taskmanager.dto;
 
 import com.backend.taskmanager.entity.Priority;
+import com.backend.taskmanager.entity.TaskStatus;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
@@ -19,7 +20,11 @@ public class TaskRequest {
     @Max(1000)
     private Integer points = 10;
 
+    private TaskStatus status;
+
     private LocalDate dueDate;
 
     private Long assignedToId;
+
+    private Long createdById;
 }
