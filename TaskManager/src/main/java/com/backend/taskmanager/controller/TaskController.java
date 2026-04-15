@@ -9,6 +9,7 @@ import com.backend.taskmanager.service.TaskService;
 import com.backend.taskmanager.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 
 @RestController
@@ -34,12 +35,12 @@ public class TaskController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping
     public Task createTask(@RequestBody TaskRequest request) {
         return taskService.createTask(toTask(request));
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PutMapping ("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskRequest request) {
         try {
@@ -49,7 +50,7 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
@@ -106,7 +107,7 @@ public class TaskController {
             return taskService.getAllTasks();
         }
     }
-
+    @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PatchMapping("/{id}/assign")
     public ResponseEntity<Task> assignTask(@PathVariable Long id, @RequestParam Long userId) {
         try {
