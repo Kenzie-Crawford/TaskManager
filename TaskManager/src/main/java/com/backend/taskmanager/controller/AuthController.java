@@ -75,9 +75,9 @@ public class AuthController {
         if (user != null) {
             return ResponseEntity.ok(Map.of(
                     "id", user.getId(),
+                    "username", user.getUsername(),
                     "name", user.getName(),
                     "email", user.getEmail(),
-                    "name", user.getName(),
                     "role", user.getRole().name(),
                     "totalPoints", user.getTotalPoints(),
                     "level", user.getLevel()
