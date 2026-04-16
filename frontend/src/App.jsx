@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import DashboardPage from "./Pages/DashboardPage";
-import MissionBoard from "./Pages/MissionBoard";
+import MissionBoard from "./Pages/MissionBoardPage";
 import TaskDetailPage from "./Pages/TaskDetailPage";
 
 function App() {
