@@ -9,4 +9,4 @@ export const claimTask = (taskId, userId) =>
   API.post(`/tasks/${taskId}/claim?userId=${userId}`);
 
 export const completeTask = (taskId, userId) =>
-  API.post(`/tasks/${taskId}/complete?userId=${userId}`);
+  API.patch(`/tasks/${taskId}/complete?userId=${userId}`);

@@ -2,26 +2,33 @@ import React from "react";
 import { useEffect } from "react";
 import { getCurrentUser } from "../Services/authService";
 import { useState } from "react";
+import API from "../Services/api";
+import TaskCard from "../Components/TaskCard";
+import { completeTask } from "../Services/taskService";
 
 
 
-export default function DashboardPage() {
+function DashboardPage() {
     const [user, setUser] = useState(null);
+    const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchData = async () => {
             try {
-                const res = await getCurrentUser();
-                setUser(res.data);
+                const userRes = await API.get(`auth/me`);
+                setUser(userRes.data);
+
+                const tasksres = await API.get(`/tasks/user/${userRes.data.id}`);
+                setTasks(tasksres.data);
             } catch (err) {
-                console.error("Failed to load user");
+                console.error("Failed to load user or tasks");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchUser();
+        fetchData();
     }, []);
 
     if (loading) {
@@ -32,12 +39,44 @@ export default function DashboardPage() {
         return <div>Failed to load user data</div>;
     }
 
+    const handleComplete = async (taskId) => {
+        try {
+            const userId = localStorage.getItem("userId");
 
-return (
-    <div>
-        <h1>Welcome {user.name}</h1>
-        <p>Level: {user.level}</p>
-        <p>Points: {user.totalPoints}</p>
-    </div>
-);
+            await completeTask(taskId, userId);
+
+            // refresh tasks
+            const res = await API.get(`/tasks/user/${userId}`);
+            setTasks(res.data);
+
+            const userRes = await API.get(`auth/me`);
+            setUser(userRes.data);
+
+        } catch (err) {
+            console.error("Error completing task", err);
+        }
+    }; 
+
+
+    return (
+        <div>
+            <h1>Welcome {user.name}</h1>
+            <p>Level: {user.level}</p>
+            <p>Points: {user.totalPoints}</p>
+            <h2>Your Tasks</h2>
+            {tasks.length === 0 ? (
+                <p>No tasks assigned</p>
+            ) : (
+                tasks.map(task => (
+                    <TaskCard
+                        key={task.id}
+                        task={task}
+                        onComplete={handleComplete}
+                    />
+                ))
+            )}
+        </div>
+    );
 }
+
+export default DashboardPage;
