@@ -4,13 +4,13 @@ const API = axios.create({
   baseURL: 'http://localhost:8081/api',
 
 });
-API.interceptors.request.use((req) => {
+API.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
 
     if(token) {
-        req.headers.Authorization = `Bearer ${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
     }
-    return req;
+    return config;
 });
 export default API;
 //axios used so JWT is loaded in the header of each request, allowing for authentication and authorization on the backend.

@@ -34,7 +34,7 @@ function LoginPage() {
       const res = await login(form);
       const data = res.data;
 
-      if (data.success) {
+      if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.userId);
 

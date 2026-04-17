@@ -16,7 +16,7 @@ function Navbar() {
 
       <div className="nav-links">
         <Link to="/dashboard">Dashboard</Link>
-        <Link to="/missions">Mission Board</Link>
+        <Link to="/mission-board">Mission Board</Link>
         <button onClick={handleLogout}>Logout</button>
       </div>
     </nav>

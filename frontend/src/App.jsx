@@ -15,7 +15,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/missions" element={<MissionBoard />} />
+        <Route path="/mission-board" element={<MissionBoard />} />
         <Route path="/tasks" element={<TaskDetailPage />} />
       </Routes>
     </BrowserRouter>
