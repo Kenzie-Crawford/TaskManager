@@ -5,10 +5,12 @@ import RegisterPage from "./Pages/RegisterPage";
 import DashboardPage from "./Pages/DashboardPage";
 import MissionBoard from "./Pages/MissionBoardPage";
 import TaskDetailPage from "./Pages/TaskDetailPage";
+import NavBar from "./Components/Navbar";
 
 function App() {
   return (
     <BrowserRouter>
+    <NavBar/>
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
