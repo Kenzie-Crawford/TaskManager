@@ -55,7 +55,7 @@ function DashboardPage() {
         } catch (err) {
             console.error("Error completing task", err);
         }
-    }; 
+    };
 
 
     return (
@@ -72,6 +72,8 @@ function DashboardPage() {
                         key={task.id}
                         task={task}
                         onComplete={handleComplete}
+                        showCompleteButton={true}
+                        showClaimButton={false}
                     />
                 ))
             )}

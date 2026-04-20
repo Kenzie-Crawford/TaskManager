@@ -43,6 +43,8 @@ function MissionBoardPage() {
                         key={task.id}
                         task={task}
                         onClaim={handleClaim}
+                        showCompleteButton={false}  // Hide Complete button
+                        showClaimButton={true} 
                     />
                 ))
             )}
