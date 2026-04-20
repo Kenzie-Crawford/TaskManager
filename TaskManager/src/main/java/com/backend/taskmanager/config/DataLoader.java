@@ -34,6 +34,7 @@ public class DataLoader implements CommandLineRunner {
         loadAchievements();
         loadUsers();
         loadTasks();
+        loadUnassignedTasks();
         loadUserAchievements();
 
         System.out.println("========================================");
@@ -252,4 +253,38 @@ public class DataLoader implements CommandLineRunner {
         task.setUpdatedAt(LocalDateTime.now());
         return task;
     }
+    private void loadUnassignedTasks() {
+        if (taskRepository.findUnassignedTasks().size() > 0) {
+            return; // Already have unassigned tasks
+        }
+
+        User alice = userRepository.findByUsername("alice_manager").orElse(null);
+        if (alice == null) return;
+
+        List<Task> missionTasks = Arrays.asList(
+                createTask("Build mobile app UI",
+                        "Create React Native components for task management",
+                        TaskStatus.PENDING, Priority.HIGH, 100,
+                        LocalDate.now().plusDays(7), null, alice),
+
+                createTask("Database optimization",
+                        "Add indexes to improve query performance",
+                        TaskStatus.PENDING, Priority.URGENT, 150,
+                        LocalDate.now().plusDays(3), null, alice),
+
+                createTask("Write user documentation",
+                        "Create user guide for the task manager",
+                        TaskStatus.PENDING, Priority.MEDIUM, 50,
+                        LocalDate.now().plusDays(10), null, alice),
+
+                createTask("Security audit",
+                        "Review authentication and authorization",
+                        TaskStatus.PENDING, Priority.HIGH, 200,
+                        LocalDate.now().plusDays(5), null, alice)
+        );
+
+        taskRepository.saveAll(missionTasks);
+        System.out.println("✅ Loaded " + missionTasks.size() + " mission board tasks");
+    }
+
 }
