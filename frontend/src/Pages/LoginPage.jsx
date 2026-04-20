@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../Services/authService";
-
+import { Link } from "react-router-dom";
 function LoginPage() {
   const [form, setForm] = useState({
     username: "",
@@ -37,6 +37,7 @@ function LoginPage() {
       if (data.token) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.userId);
+        localStorage.setItem("userRole", data.role);
 
         navigate("/dashboard");
       } else {
@@ -80,6 +81,9 @@ function LoginPage() {
           </div>
           <button type="submit" className="btn btn-primary btn-full">Log In</button>
         </form>
+        <p className="text-center">
+          Don't have an account? <Link to="/register">Sign up</Link>
+        </p>
       </div>
     </div>
   );
