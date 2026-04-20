@@ -1,4 +1,16 @@
 function TaskCard ({ task, onComplete, onClaim, showCompleteButton = true, showClaimButton = false }) {
+    const handleClaimClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClaim(task.id);
+    };
+
+    const handleCompleteClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onComplete(task.id);
+    };
+
     return (
         <div className={`task-card ${task.priority.toLowerCase()}`}>
             <h3>{task.title}</h3>
@@ -10,14 +22,14 @@ function TaskCard ({ task, onComplete, onClaim, showCompleteButton = true, showC
             <p className={`status ${task.status.toLowerCase()}`}>{task.status}</p>
 
              {showClaimButton && onClaim && task.status !== "COMPLETED" && (
-                <button onClick={() => onClaim(task.id)} className="claim-btn">
+                <button onClick={handleClaimClick} className="claim-btn">
                     Claim Mission
                 </button>
             )}
 
             {/* Show Complete button for Dashboard */}
             {showCompleteButton && onComplete && task.status !== "COMPLETED" && (
-                <button onClick={() => onComplete(task.id)} className="complete-btn">
+                <button onClick={handleCompleteClick} className="complete-btn">
                     Complete
                 </button>
             )}

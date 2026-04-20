@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getUnassignedTasks, claimTask } from "../Services/taskService";
 import TaskCard from "../Components/TaskCard";
 
@@ -39,13 +40,18 @@ function MissionBoardPage() {
                 <p>No available missions right now</p>
             ) : (
                 tasks.map((task) => (
-                    <TaskCard
+                    <Link
                         key={task.id}
-                        task={task}
-                        onClaim={handleClaim}
-                        showCompleteButton={false}  // Hide Complete button
-                        showClaimButton={true} 
-                    />
+                        to={`/tasks/${task.id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <TaskCard
+                            task={task}
+                            onClaim={handleClaim}
+                            showCompleteButton={false}
+                            showClaimButton={true}
+                        />
+                    </Link>
                 ))
             )}
         </div>
@@ -53,5 +59,4 @@ function MissionBoardPage() {
 }
 
     export default MissionBoardPage;
-
 
