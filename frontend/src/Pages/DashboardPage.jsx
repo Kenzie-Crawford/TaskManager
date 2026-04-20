@@ -5,7 +5,7 @@ import { useState } from "react";
 import API from "../Services/api";
 import TaskCard from "../Components/TaskCard";
 import { completeTask } from "../Services/taskService";
-
+import { Link } from "react-router-dom";
 
 
 function DashboardPage() {
@@ -68,13 +68,16 @@ function DashboardPage() {
                 <p>No tasks assigned</p>
             ) : (
                 tasks.map(task => (
-                    <TaskCard
+                    <Link
                         key={task.id}
-                        task={task}
-                        onComplete={handleComplete}
-                        showCompleteButton={true}
-                        showClaimButton={false}
-                    />
+                        to={`/tasks/${task.id}`}
+                        style={{ textDecoration: "none", color: "inherit" }} // Removes link styling
+                    >
+                        <TaskCard
+                            task={task}
+                            onComplete={handleComplete}
+                        />
+                    </Link>
                 ))
             )}
         </div>
