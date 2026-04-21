@@ -1,13 +1,17 @@
 package com.backend.taskmanager.controller;
 
 
+import com.backend.taskmanager.dto.LeaderBoardEntry;
 import com.backend.taskmanager.entity.*;
+import com.backend.taskmanager.service.AchievementService;
 import com.backend.taskmanager.service.UserService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 
@@ -16,9 +20,35 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AchievementService achievementService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AchievementService achievementService) {
         this.userService = userService;
+        this.achievementService = achievementService;
+    }
+
+    // Leaderboard - top users sorted by points, with achievement counts
+    @GetMapping("/leaderboard")
+    public ResponseEntity<List<LeaderBoardEntry>> getLeaderboard(
+            @RequestParam(defaultValue = "20") int limit) {
+        List<User> users = userService.getAllUsers();
+
+        AtomicInteger rank = new AtomicInteger(1);
+        List<LeaderBoardEntry> leaderboard = users.stream()
+                .sorted((a, b) -> b.getTotalPoints() - a.getTotalPoints())
+                .limit(limit)
+                .map(user -> LeaderBoardEntry.builder()
+                        .userId(user.getId())
+                        .username(user.getUsername())
+                        .name(user.getName())
+                        .totalPoints(user.getTotalPoints())
+                        .level(user.getLevel())
+                        .achievementCount(achievementService.countUserAchievements(user.getId()))
+                        .rank(rank.getAndIncrement())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(leaderboard);
     }
 
     @GetMapping
@@ -70,12 +100,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         try{
-                User updatedUser = userService.updateUser(id, userDetails);
-                return ResponseEntity.ok(updatedUser);
-            } catch (RuntimeException e) {
-                return ResponseEntity.notFound().build();
-            }
+            User updatedUser = userService.updateUser(id, userDetails);
+            return ResponseEntity.ok(updatedUser);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
+    }
 
 
     @PutMapping("/{id}/points")
