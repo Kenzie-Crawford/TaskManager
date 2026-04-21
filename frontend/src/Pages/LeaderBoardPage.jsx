@@ -47,7 +47,6 @@ function LeaderboardPage() {
                         <tr>
                             <th>Rank</th>
                             <th>Name</th>
-                            <th>Username</th>
                             <th>Level</th>
                             <th>Points</th>
                             <th>Achievements</th>
@@ -66,7 +65,6 @@ function LeaderboardPage() {
                                     {entry.name}
                                     {entry.userId == currentUserId && " (you)"}
                                 </td>
-                                <td>@{entry.username}</td>
                                 <td>Lvl {entry.level}</td>
                                 <td>{entry.totalPoints} pts</td>
                                 <td>{entry.achievementCount} 🏆</td>

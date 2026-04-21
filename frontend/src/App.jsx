@@ -8,7 +8,7 @@ import AdminPanel from "./Pages/adminPanel";
 import AchievementsPage from "./Pages/AchievementsPage";
 import LeaderBoardPage from "./Pages/LeaderBoardPage";
 import NavBar from "./Components/NavBar";
-
+import CreateTaskPage from "./Pages/CreateTaskPage";
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="/leaderboard" element={<LeaderBoardPage />} />
+        <Route path="/create-task" element={<CreateTaskPage />} />
       </Routes>
     </BrowserRouter>
   );
