@@ -13,26 +13,29 @@ function Navbar() {
     navigate("/");
   };
 
-  if(!isAuthenticated) {
-    return null; 
+  if (!isAuthenticated) {
+    return null;
   }
-  
+
   return (
     <nav>
       <h2>Task Manager</h2>
-
       <div>
         <Link to="/dashboard">Dashboard</Link>
         {" | "}
         <Link to="/mission-board">Mission Board</Link>
-        
+        {" | "}
+        <Link to="/achievements">Achievements</Link>
+        {" | "}
+        <Link to="/leaderboard">Leaderboard</Link>
+
         {(userRole === "MANAGER" || userRole === "ADMIN") && (
           <>
             {" | "}
             <Link to="/admin">Admin Panel</Link>
           </>
         )}
-        
+
         {" | "}
         <button onClick={handleLogout}>Logout</button>
       </div>

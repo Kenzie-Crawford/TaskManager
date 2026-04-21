@@ -30,7 +30,7 @@ function TaskCard ({ task, onComplete, onClaim, showCompleteButton = true, showC
             {/* Show Complete button for Dashboard */}
             {showCompleteButton && onComplete && task.status !== "COMPLETED" && (
                 <button onClick={handleCompleteClick} className="complete-btn">
-                    Complete
+                    Mark As Completed
                 </button>
             )}
         </div>
