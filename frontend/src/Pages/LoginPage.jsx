@@ -81,6 +81,9 @@ function LoginPage() {
           </div>
           <button type="submit" className="btn btn-primary btn-full">Log In</button>
         </form>
+        <p className="signup-link">
+          Don't have an account? <a href="/register">Sign Up</a>
+        </p>
       </div>
     </div>
   );
