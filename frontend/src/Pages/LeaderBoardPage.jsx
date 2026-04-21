@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { getLeaderboard } from "../Services/achievementService";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import ErrorMessage from "../Components/ErrorMessage";
 
 function LeaderboardPage() {
     const [leaderboard, setLeaderboard] = useState([]);
@@ -31,8 +33,8 @@ function LeaderboardPage() {
         return `#${rank}`;
     };
 
-    if (loading) return <div>Loading leaderboard...</div>;
-    if (error) return <div>{error}</div>;
+    if (loading) return <LoadingSpinner message="Loading leaderboard..." />;
+    if (error) return <ErrorMessage message={error} onRetry={fetchLeaderboard} />;
 
     return (
         <div>

@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getUnassignedTasks, claimTask } from "../Services/taskService";
 import TaskCard from "../Components/TaskCard";
+import ErrorMessage from "../Components/ErrorMessage";
+import LoadingSpinner from "../Components/LoadingSpinner";
 
 
 function MissionBoardPage() {
     const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         fetchTasks();
@@ -13,10 +17,14 @@ function MissionBoardPage() {
 
     const fetchTasks = async () => {
         try {
+            setLoading(true);
             const res = await getUnassignedTasks();
             setTasks(res.data);
         } catch (err) {
+            setError("Failed to load missions");
             console.error("Failed to load tasks", err);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -30,7 +38,8 @@ function MissionBoardPage() {
         }
     };
 
-    
+    if (loading) return <LoadingSpinner message="Loading missions..." />;
+    if (error) return <ErrorMessage message={error} onRetry={fetchTasks} />;
 
     return (
         <div className="mission-board-container">
@@ -58,5 +67,5 @@ function MissionBoardPage() {
     );
 }
 
-    export default MissionBoardPage;
+export default MissionBoardPage;
 

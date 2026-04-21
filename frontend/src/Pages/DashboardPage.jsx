@@ -6,12 +6,15 @@ import API from "../Services/api";
 import TaskCard from "../Components/TaskCard";
 import { completeTask } from "../Services/taskService";
 import { Link } from "react-router-dom";
-
+import UserStatsCard from "../Components/UserStatsCard";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import ErrorMessage from "../Components/ErrorMessage";
 
 function DashboardPage() {
     const [user, setUser] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [achievementCount, setAchievementCount] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -21,6 +24,9 @@ function DashboardPage() {
 
                 const tasksres = await API.get(`/tasks/user/${userRes.data.id}`);
                 setTasks(tasksres.data);
+
+                const countRes = await API.get(`/achievements/user/${userRes.data.id}/count`);
+                setAchievementCount(countRes.data);
             } catch (err) {
                 console.error("Failed to load user or tasks");
             } finally {
@@ -31,12 +37,12 @@ function DashboardPage() {
         fetchData();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+        if (loading) {
+            return <LoadingSpinner />;
+        }
 
     if (!user) {
-        return <div>Failed to load user data</div>;
+        return <ErrorMessage message="Failed to load user data" />;
     }
 
     const handleComplete = async (taskId) => {
@@ -60,9 +66,7 @@ function DashboardPage() {
 
     return (
         <div>
-            <h1>Welcome {user.name}</h1>
-            <p>Level: {user.level}</p>
-            <p>Points: {user.totalPoints}</p>
+            <UserStatsCard user={user} achievementCount={achievementCount} />
             <h2>Your Tasks</h2>
             {tasks.length === 0 ? (
                 <p>No tasks assigned</p>

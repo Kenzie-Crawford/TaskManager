@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../Services/api";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import ErrorMessage from "../Components/ErrorMessage";
+
 
 function AdminPanel() {
   const [users, setUsers] = useState([]);
@@ -65,7 +68,7 @@ function AdminPanel() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner message="Loading admin panel..." />;
 
   return (
     <div>

@@ -6,6 +6,8 @@ import {
     getAchievementProgress,
     checkAndAwardAchievements,
 } from "../Services/achievementService";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import ErrorMessage from "../Components/ErrorMessage";
 
 function AchievementsPage() {
     const [earned, setEarned] = useState([]);
@@ -69,8 +71,8 @@ function AchievementsPage() {
         }
     };
 
-    if (loading) return <div>Loading achievements...</div>;
-    if (error) return <div>{error}</div>;
+    if (loading) return <LoadingSpinner message="Loading achievements..." />;
+    if (error) return <ErrorMessage message={error} onRetry={fetchAchievements} />;
 
     return (
         <div>

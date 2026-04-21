@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../Services/api";
 import CreateTaskForm from "../Components/CreateTaskForm";
+import LoadingSpinner from "../Components/LoadingSpinner";
+import ErrorMessage from "../Components/ErrorMessage";      
+
 
 function CreateTaskPage() {
     const [users, setUsers] = useState([]);
@@ -43,7 +46,7 @@ function CreateTaskPage() {
     return (
         <div>
             <h1>Create New Task</h1>
-            {error && <p>{error}</p>}
+            {error && <ErrorMessage message={error} onRetry={handleSubmit} />}
             {success && <p>{success}</p>}
             <CreateTaskForm
                 onSubmit={handleSubmit}

@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import API from "../Services/api";
+import ErrorMessage from "../Components/ErrorMessage";
+import LoadingSpinner from "../Components/LoadingSpinner";
+
 
 function TaskDetailPage() {
   const { id } = useParams();
@@ -117,17 +120,10 @@ function TaskDetailPage() {
   };
 
   if (loading) {
-    return <div>Loading task...</div>;
+    return <LoadingSpinner message="Loading task..." />;
   }
 
-  if (error) {
-    return (
-      <div>
-        <p><strong>Error:</strong> {error}</p>
-        <button onClick={() => navigate("/dashboard")}>Back to Dashboard</button>
-      </div>
-    );
-  }
+  if (error) return <ErrorMessage message={error} onRetry={fetchTask} />;
 
   if (!task) {
     return <div>Task not found</div>;
