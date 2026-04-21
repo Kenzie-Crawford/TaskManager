@@ -33,6 +33,8 @@ function Navbar() {
           <>
             {" | "}
             <Link to="/admin">Admin Panel</Link>
+            {" | "}
+            <Link to="/create-task">Create Task</Link>
           </>
         )}
 
