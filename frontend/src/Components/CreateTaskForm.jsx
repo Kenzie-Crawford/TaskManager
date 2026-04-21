@@ -1,6 +1,5 @@
 import { useState } from "react";
-import LoadingSpinner from "./LoadingSpinner";
-import ErrorMessage from "./ErrorMessage";
+
 
 
 
@@ -27,7 +26,7 @@ function CreateTaskForm({ onSubmit, users = [], loading = false }) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <div>
+            <div className="form-group">
                 <label>Title</label>
                 <input
                     name="title"
@@ -38,7 +37,7 @@ function CreateTaskForm({ onSubmit, users = [], loading = false }) {
                 />
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Description</label>
                 <textarea
                     name="description"
@@ -47,7 +46,7 @@ function CreateTaskForm({ onSubmit, users = [], loading = false }) {
                 />
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Priority</label>
                 <select name="priority" value={form.priority} onChange={handleChange}>
                     <option value="LOW">Low</option>
@@ -57,7 +56,7 @@ function CreateTaskForm({ onSubmit, users = [], loading = false }) {
                 </select>
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Points</label>
                 <input
                     name="points"
@@ -68,7 +67,7 @@ function CreateTaskForm({ onSubmit, users = [], loading = false }) {
                 />
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Due Date</label>
                 <input
                     name="dueDate"
@@ -78,7 +77,7 @@ function CreateTaskForm({ onSubmit, users = [], loading = false }) {
                 />
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Assign To</label>
                 <select
                     name="assignedToId"

@@ -44,15 +44,17 @@ function CreateTaskPage() {
     };
 
     return (
-        <div>
+        <div className="create-task-container">
             <h1>Create New Task</h1>
             {error && <ErrorMessage message={error} onRetry={handleSubmit} />}
             {success && <p>{success}</p>}
-            <CreateTaskForm
-                onSubmit={handleSubmit}
-                users={users}
-                loading={loading}
-            />
+            <div className="create-task-form">
+                <CreateTaskForm
+                    onSubmit={handleSubmit}
+                    users={users}
+                    loading={loading}
+                />
+            </div>
         </div>
     );
 }

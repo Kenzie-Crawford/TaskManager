@@ -71,7 +71,7 @@ function AdminPanel() {
   if (loading) return <LoadingSpinner message="Loading admin panel..." />;
 
   return (
-    <div>
+    <div className ="admin-container">
       <h1>Admin Panel</h1>
       
       <button onClick={() => setShowTaskForm(!showTaskForm)}>

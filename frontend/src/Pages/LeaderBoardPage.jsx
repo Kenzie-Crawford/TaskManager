@@ -37,14 +37,14 @@ function LeaderboardPage() {
     if (error) return <ErrorMessage message={error} onRetry={fetchLeaderboard} />;
 
     return (
-        <div>
+        <div className="leaderboard-container">
             <h1>Leaderboard</h1>
             <p>Top performers ranked by total points</p>
 
             {leaderboard.length === 0 ? (
                 <p>No users found.</p>
             ) : (
-                <table>
+                <table className="leaderboard-table">
                     <thead>
                         <tr>
                             <th>Rank</th>

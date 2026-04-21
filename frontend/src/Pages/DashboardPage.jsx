@@ -65,7 +65,7 @@ function DashboardPage() {
 
 
     return (
-        <div>
+        <div className="dashboard-container">
             <UserStatsCard user={user} achievementCount={achievementCount} />
             <h2>Your Tasks</h2>
             {tasks.length === 0 ? (

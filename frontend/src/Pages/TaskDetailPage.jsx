@@ -133,11 +133,11 @@ function TaskDetailPage() {
   const isCompleted = task.status === "COMPLETED";
 
   return (
-    <div>
+    <div className="task-detail-container">
       <button onClick={() => navigate(-1)}>← Back</button>
 
       {isEditing ? (
-        <div>
+        <div className ="task-detail-card edit-form">
           <h1>Edit Task</h1>
           <form onSubmit={handleUpdate}>
             <div>
@@ -208,7 +208,7 @@ function TaskDetailPage() {
           </form>
         </div>
       ) : (
-        <div>
+        <div className = "task-detail-card">
           <h1>{task.title}</h1>
           
           {/* Complete button - shows for ANY user assigned to this task */}

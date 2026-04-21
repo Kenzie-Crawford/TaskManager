@@ -75,7 +75,7 @@ function AchievementsPage() {
     if (error) return <ErrorMessage message={error} onRetry={fetchAchievements} />;
 
     return (
-        <div>
+        <div className = "achievements-container">
             <h1>Achievements</h1>
 
             <button onClick={handleCheckAchievements} disabled={checking}>

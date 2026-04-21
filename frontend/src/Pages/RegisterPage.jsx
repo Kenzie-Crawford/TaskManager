@@ -30,39 +30,39 @@ function RegisterPage() {
       setError("All fields are required");
       return false;
     }
-    
+
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match");
       return false;
     }
-    
+
     if (form.password.length < 6) {
       setError("Password must be at least 6 characters");
       return false;
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
       setError("Please enter a valid email address");
       return false;
     }
-    
+
     if (form.username.length < 3) {
       setError("Username must be at least 3 characters");
       return false;
     }
-    
+
     if (form.name.length < 2) {
       setError("Name must be at least 2 characters");
       return false;
     }
-    
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setLoading(true);
@@ -78,10 +78,10 @@ function RegisterPage() {
       };
 
       const response = await register(registrationData);
-      
+
       if (response.data.success) {
         setSuccess("Registration successful! Redirecting to login...");
-        
+
         setForm({
           username: "",
           email: "",
@@ -89,7 +89,7 @@ function RegisterPage() {
           password: "",
           confirmPassword: "",
         });
-        
+
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -111,100 +111,101 @@ function RegisterPage() {
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h1>Task Manager</h1>
       <p>Create your account</p>
 
       {error && (
-        <div>
+        <div className="form-group">
           <strong>Error:</strong> {error}
         </div>
       )}
 
       {success && (
-        <div>
+        <div className="form-group">
           <strong>Success!</strong> {success}
         </div>
       )}
+      <div className="register-form">
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Full Name *</label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="John Doe"
+              disabled={loading}
+            />
+          </div>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Full Name *</label>
-          <input
-            id="name"
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="John Doe"
-            disabled={loading}
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="username">Username *</label>
+            <input
+              id="username"
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
+              placeholder="johndoe"
+              disabled={loading}
+            />
+            <small>Minimum 3 characters</small>
+          </div>
 
-        <div>
-          <label htmlFor="username">Username *</label>
-          <input
-            id="username"
-            type="text"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            placeholder="johndoe"
-            disabled={loading}
-          />
-          <small>Minimum 3 characters</small>
-        </div>
+          <div className="form-group">
+            <label htmlFor="email">Email Address *</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="john@example.com"
+              disabled={loading}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="email">Email Address *</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="john@example.com"
-            disabled={loading}
-          />
-        </div>
+          <div className="form-group">
+            <label htmlFor="password">Password *</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="••••••"
+              disabled={loading}
+            />
+            <small>Minimum 6 characters</small>
+          </div>
 
-        <div>
-          <label htmlFor="password">Password *</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="••••••"
-            disabled={loading}
-          />
-          <small>Minimum 6 characters</small>
-        </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password *</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              placeholder="••••••"
+              disabled={loading}
+            />
+          </div>
 
-        <div>
-          <label htmlFor="confirmPassword">Confirm Password *</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            placeholder="••••••"
-            disabled={loading}
-          />
-        </div>
+          <button type="submit" disabled={loading}>
+            {loading ? "Creating account..." : "Sign Up"}
+          </button>
+        </form>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating account..." : "Sign Up"}
-        </button>
-      </form>
-
-      <p>
-        Already have an account? <Link to="/">Sign In</Link>
-      </p>
-    </div>
-  );
+        <p>
+          Already have an account? <Link to="/">Sign In</Link>
+        </p>
+      </div>
+      </div>
+      );
 }
 
-export default RegisterPage;
+      export default RegisterPage;
