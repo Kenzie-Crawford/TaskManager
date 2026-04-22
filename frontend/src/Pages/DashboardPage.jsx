@@ -67,9 +67,9 @@ function DashboardPage() {
     return (
         <div className="dashboard-container">
             <UserStatsCard user={user} achievementCount={achievementCount} />
-            <h2>Your Tasks</h2>
+            <h2>Your Missions</h2>
             {tasks.length === 0 ? (
-                <p>No tasks assigned</p>
+                <p>No missions assigned</p>
             ) : (
                 tasks.map(task => (
                     <Link

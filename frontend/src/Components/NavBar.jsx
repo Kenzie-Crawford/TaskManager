@@ -21,7 +21,7 @@ function Navbar() {
   return (
     <nav>
       <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-        <img src={logo} alt="WorkFlow logo" style={{ height: "50px", width: "50px" }} />
+        <img src={logo} alt="WorkFlow logo" style={{ height: "70px", width: "70px" }} />
         <span className="nav-brand">Work Flow</span>
       </div>
       <div>
@@ -38,7 +38,7 @@ function Navbar() {
             {" | "}
             <Link to="/admin">Admin Panel</Link>
             {" | "}
-            <Link to="/create-task">Create Task</Link>
+            <Link to="/create-task">Create Mission</Link>
           </>
         )}
 
