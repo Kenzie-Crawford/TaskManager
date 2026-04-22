@@ -148,7 +148,7 @@ public class AchievementServiceImpl implements AchievementService {
         System.out.println("🎉 User " + user.getUsername() + " earned achievement: " + achievement.getName());
     }
 
-        @Scheduled(cron = "0 0 0 21 * *")
+        @Scheduled(cron = "0 0 0 1 * *")
         @Transactional
         public void resetMonthlyAchievements() {
             userAchievementRepository.deleteAll();

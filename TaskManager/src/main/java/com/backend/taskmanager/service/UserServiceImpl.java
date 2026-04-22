@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(existingUser);
     }
 
-    @Scheduled(cron = "0 0 0 21 * *")
+    @Scheduled(cron = "0 0 0 1 * *")
     @Transactional
     public void resetMonthlyPoints() {
         List<User> allUsers = userRepository.findAll();
