@@ -112,21 +112,13 @@ function RegisterPage() {
 
   return (
     <div className="register-container">
-      <h1>Task Manager</h1>
-      <p>Create your account</p>
+      <div className="register-card">
+        <h1>Work Flow</h1>
+        <h2>Create your account</h2>
 
-      {error && (
-        <div className="form-group">
-          <strong>Error:</strong> {error}
-        </div>
-      )}
+        {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
 
-      {success && (
-        <div className="form-group">
-          <strong>Success!</strong> {success}
-        </div>
-      )}
-      <div className="register-form">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Full Name *</label>
@@ -195,17 +187,15 @@ function RegisterPage() {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? "Creating account..." : "Sign Up"}
           </button>
         </form>
 
-        <p>
-          Already have an account? <Link to="/">Sign In</Link>
-        </p>
+        <p>Already have an account? <Link to="/">Sign In</Link></p>
       </div>
-      </div>
-      );
+    </div>
+  );
 }
 
-      export default RegisterPage;
+export default RegisterPage;

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/workflownobg.png";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -19,7 +20,10 @@ function Navbar() {
 
   return (
     <nav>
-      <h2>Task Manager</h2>
+      <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+        <img src={logo} alt="WorkFlow logo" style={{ height: "50px", width: "50px" }} />
+        <span className="nav-brand">Work Flow</span>
+      </div>
       <div>
         <Link to="/dashboard">Dashboard</Link>
         {" | "}

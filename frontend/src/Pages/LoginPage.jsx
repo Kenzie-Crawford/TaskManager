@@ -53,7 +53,7 @@ function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1> Task Board</h1>
+        <h1> Work Flow</h1>
         <h2>Sign In</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>

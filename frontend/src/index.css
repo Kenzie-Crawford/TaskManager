@@ -1,17 +1,17 @@
 /* ── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --bg-primary:    #0f1117;
-  --bg-secondary:  #1a1d27;
-  --bg-card:       #1e2130;
-  --bg-hover:      #252840;
+  --bg-primary:    #0d1117;
+  --bg-secondary:  #161c26;
+  --bg-card:       #1a2233;
+  --bg-hover:      #1f2a3d;
 
-  --accent:        #7c5cbf;
-  --accent-bright: #9b7fe0;
-  --accent-dim:    rgba(124, 92, 191, 0.15);
-  --accent-border: rgba(124, 92, 191, 0.4);
+  --accent:        #1a56b0;
+  --accent-bright: #38a6e8;
+  --accent-dim:    rgba(26, 86, 176, 0.15);
+  --accent-border: rgba(26, 86, 176, 0.4);
 
-  --gold:          #f0b429;
-  --gold-dim:      rgba(240, 180, 41, 0.15);
+  --gold:          #38a6e8;
+  --gold-dim:     rgba(56, 166, 232, 0.15);
 
   --success:       #34d399;
   --success-dim:   rgba(52, 211, 153, 0.15);
@@ -24,7 +24,7 @@
   --text-secondary:#9ca3af;
   --text-muted:    #6b7280;
 
-  --border:        rgba(255,255,255,0.08);
+  --border:        #38a6e8;
   --border-accent: rgba(124, 92, 191, 0.35);
 
   --radius-sm:     6px;
@@ -62,21 +62,22 @@ a:hover { color: var(--text-primary); }
 
 /* ── Navbar ────────────────────────────────────────────────── */
 nav {
-  background: var(--bg-secondary);
+  background: var(--bg-card);
   border-bottom: 1px solid var(--border);
   padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 70px;
   position: sticky;
   top: 0;
   z-index: 100;
+  border-radius:0 0 16px 16px;
 }
 
 nav h2 {
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--accent-bright);
   margin: 0;
   letter-spacing: 1px;
@@ -115,6 +116,17 @@ nav button {
   transition: background 0.2s;
   margin-left: 0.5rem;
 }
+
+.nav-brand {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+
+} 
 
 nav button:hover { background: rgba(248,113,113,0.25); }
 
@@ -467,12 +479,17 @@ small { font-size: 0.75rem; color: var(--text-muted); }
   margin-bottom: 1.5rem;
   background: none;
   border: none;
+  border-color: transparent;
   color: var(--text-secondary);
   padding: 0;
   font-size: 0.875rem;
 }
 
-.task-detail-container .back-btn:hover { color: var(--text-primary); background: none; }
+.task-detail-container .back-btn:hover {
+  color: var(--text-primary);
+  background: none;
+  border-color: transparent;
+}
 
 .task-detail-card {
   background: var(--bg-card);

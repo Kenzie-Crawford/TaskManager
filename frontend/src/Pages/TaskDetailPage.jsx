@@ -134,7 +134,7 @@ function TaskDetailPage() {
 
   return (
     <div className="task-detail-container">
-      <button onClick={() => navigate(-1)}>← Back</button>
+      <button className = "back-btn" onClick={() => navigate(-1)}>← Back</button>
 
       {isEditing ? (
         <div className ="task-detail-card edit-form">
