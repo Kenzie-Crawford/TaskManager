@@ -30,8 +30,8 @@ function TaskDetailPage() {
   console.log("Current user ID:", userId);
 
   // Permissions - Only MANAGER or ADMIN can edit/delete
-  const canEdit = userRole === "MANAGER" || userRole === "ADMIN";
-  const canDelete = userRole === "MANAGER" || userRole === "ADMIN";
+  const canEdit = userRole == "MANAGER" || userRole == "ADMIN";
+  const canDelete = userRole == "MANAGER" || userRole == "ADMIN";
 
   // Regular employees can only complete tasks assigned to them
   const canComplete = true; // Any authenticated user can complete tasks assigned to them

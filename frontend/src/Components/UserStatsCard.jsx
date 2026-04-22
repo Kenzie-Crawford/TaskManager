@@ -7,7 +7,8 @@ function UserStatsCard({ user, achievementCount = 0 }) {
         return "Elite";
     };
 
-    const pointsToNextLevel = (user.level * 100) - user.totalPoints;
+    const pointsIntoCurrentLevel = user.totalPoints % 100;
+    const pointsToNextLevel = 100 - pointsIntoCurrentLevel;
 
     return (
         <div className="user-stats-card">
@@ -38,9 +39,7 @@ function UserStatsCard({ user, achievementCount = 0 }) {
                 <div className="progress-bar-container">
                     <div
                         className="progress-bar"
-                        style={{
-                            width: `${(user.totalPoints % 100)}%`
-                        }}
+                        style={{ width: `${pointsIntoCurrentLevel}%` }}
                     />
                 </div>
             </div>
