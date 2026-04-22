@@ -6,7 +6,9 @@ import com.backend.taskmanager.entity.User;
 import com.backend.taskmanager.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,7 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,6 +125,17 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.save(existingUser);
+    }
+
+    @Scheduled(cron = "0 0 0 21 * *")
+    @Transactional
+    public void resetMonthlyPoints() {
+        List<User> allUsers = userRepository.findAll();
+        for (User user : allUsers) {
+            user.setTotalPoints(0);
+        }
+        userRepository.saveAll(allUsers);
+        System.out.println("✅ Monthly points reset complete");
     }
 
     @Override

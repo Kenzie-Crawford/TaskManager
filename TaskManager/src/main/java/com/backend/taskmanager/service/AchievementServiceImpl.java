@@ -5,8 +5,10 @@ import com.backend.taskmanager.repository.AchievementRepository;
 import com.backend.taskmanager.repository.UserAchievementRepository;
 import com.backend.taskmanager.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -144,5 +146,12 @@ public class AchievementServiceImpl implements AchievementService {
         userService.addPoints(userId, 50);
 
         System.out.println("🎉 User " + user.getUsername() + " earned achievement: " + achievement.getName());
+    }
+
+        @Scheduled(cron = "0 0 0 21 * *")
+        @Transactional
+        public void resetMonthlyAchievements() {
+            userAchievementRepository.deleteAll();
+            System.out.println("✅ Monthly achievements reset complete");
     }
 }

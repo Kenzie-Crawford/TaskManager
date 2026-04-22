@@ -30,4 +30,6 @@ public interface AchievementService {
 
     // Get progress toward a specific achievement
     int getAchievementProgress(Long userId, Long achievementId);
+
+
 }

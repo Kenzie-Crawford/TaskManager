@@ -22,6 +22,8 @@ public interface UserAchievementRepository extends JpaRepository<UserAchievement
 
     long countByUser(User user);
 
+    void deleteAll();
+
     List<UserAchievement> findByAchievement(Achievement achievement);
 
     List<UserAchievement> findByUserAndEarnedAtBetween(User user, LocalDateTime start, LocalDateTime end);
