@@ -9,7 +9,7 @@ import AchievementsPage from "./Pages/AchievementsPage";
 import LeaderBoardPage from "./Pages/LeaderBoardPage";
 import NavBar from "./Components/NavBar";
 import CreateTaskPage from "./Pages/CreateTaskPage";
-import HeroPage from "../../../Downloads/HeroPage";
+import HeroPage from "./Pages/HeroPage";
 import Particles from "./Components/Particles";
 
 function App() {

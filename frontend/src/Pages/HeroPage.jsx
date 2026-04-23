@@ -57,7 +57,7 @@ export default function HeroPage() {
           transition: "opacity 0.5s ease, transform 0.5s ease",
         }}>
           <span style={styles.badgeDot} />
-          Gamified Task Management
+          WorkFlow
         </div>
 
         {/* Heading */}
@@ -69,7 +69,7 @@ export default function HeroPage() {
         }}>
           Turn Work Into
           <br />
-          <span style={styles.accent}>Missions.</span>
+          <span style={styles.accent}>Completed Missions.</span>
         </h1>
 
         {/* Subtext */}
@@ -79,8 +79,7 @@ export default function HeroPage() {
           transform: visible ? "translateY(0)" : "translateY(16px)",
           transition: "opacity 0.6s 0.2s ease, transform 0.6s 0.2s ease",
         }}>
-          Earn XP, unlock achievements, and climb the leaderboard —
-          one completed task at a time.
+          Earn XP, unlock achievements, and climb the leaderboard. This is your mission - should you choose to accept it.
         </p>
 
         {/* CTA Buttons */}
