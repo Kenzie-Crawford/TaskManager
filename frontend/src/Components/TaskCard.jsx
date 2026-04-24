@@ -41,7 +41,7 @@ function TaskCard ({ task, onComplete, onStart, onClaim, showCompleteButton = tr
             {/* Start button — Dashboard, PENDING tasks only */}
             {showCompleteButton && onStart && isPending && (
                 <button onClick={handleStartClick} className="claim-btn">
-                    Start Task
+                    Start Mission
                 </button>
             )}
 
