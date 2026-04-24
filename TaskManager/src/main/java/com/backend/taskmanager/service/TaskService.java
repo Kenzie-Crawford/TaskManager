@@ -32,4 +32,5 @@ public interface TaskService {
 
     List<Task> getMissionBoardTasks();  // Get all unassigned tasks
     Task claimTask(Long taskId, Long userId);
+    public Task startTask(Long taskId, Long userId);
 }

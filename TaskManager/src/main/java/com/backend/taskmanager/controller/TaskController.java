@@ -168,5 +168,12 @@ public class TaskController {
         }
     }
 
-}
+        @PatchMapping("/{id}/start")
+        public ResponseEntity<Task> startTask(@PathVariable Long id, @RequestParam Long userId) {
+            Task task = taskService.startTask(id, userId);
+            return ResponseEntity.ok(task);
+        }
+    }
+
+
 

@@ -216,35 +216,42 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-        @Override
-        public List<Task> getMissionBoardTasks() {
-            return taskRepository.findUnassignedTasks();
-        }
-
-        @Override
-        @Transactional
-        public Task claimTask(Long taskId, Long userId) {
-            // Get the unassigned task
-            Task task = findById(taskId)
-                    .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));
-
-            // Check if task is already assigned
-            if (task.getAssignedTo() != null) {
-                throw new RuntimeException("Task is already claimed by another user");
-            }
-
-            // Get the user claiming the task
-            User user = userService.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-
-            // Assign the task to this user
-            task.setAssignedTo(user);
-
-            // Change status to IN_PROGRESS when claimed
-            if (task.getStatus() == TaskStatus.PENDING) {
-                task.setStatus(TaskStatus.IN_PROGRESS);
-            }
-
-            return taskRepository.save(task);
-        }
+    @Override
+    public List<Task> getMissionBoardTasks() {
+        return taskRepository.findUnassignedTasks();
     }
+
+    @Override
+    @Transactional
+    public Task claimTask(Long taskId, Long userId) {
+        // Get the unassigned task
+        Task task = findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + taskId));
+
+        // Check if task is already assigned
+        if (task.getAssignedTo() != null) {
+            throw new RuntimeException("Task is already claimed by another user");
+        }
+
+        // Get the user claiming the task
+        User user = userService.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        // Assign the task to this user
+        task.setAssignedTo(user);
+
+        // Change status to IN_PROGRESS when claimed
+        if (task.getStatus() == TaskStatus.PENDING) {
+            task.setStatus(TaskStatus.IN_PROGRESS);
+        }
+
+        return taskRepository.save(task);
+    }
+
+    public Task startTask(Long taskId, Long userId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        task.setStatus(TaskStatus.IN_PROGRESS);
+        return taskRepository.save(task);
+    }
+}
