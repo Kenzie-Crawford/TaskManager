@@ -21,20 +21,11 @@ function TaskDetailPage() {
     dueDate: ""
   });
 
-  // Get current user info
   const userRole = localStorage.getItem("userRole");
   const userId = localStorage.getItem("userId");
 
-  // Debug: Check what role is being read
-  console.log("Current user role:", userRole);
-  console.log("Current user ID:", userId);
-
-  // Permissions - Only MANAGER or ADMIN can edit/delete
   const canEdit = userRole == "MANAGER" || userRole == "ADMIN";
   const canDelete = userRole == "MANAGER" || userRole == "ADMIN";
-
-  // Regular employees can only complete tasks assigned to them
-  const canComplete = true; // Any authenticated user can complete tasks assigned to them
 
   useEffect(() => {
     fetchTask();
@@ -62,12 +53,10 @@ function TaskDetailPage() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    
     if (!canEdit) {
       setError("You don't have permission to edit this task");
       return;
     }
-    
     try {
       const response = await API.put(`/tasks/${id}`, editForm);
       setTask(response.data);
@@ -84,7 +73,6 @@ function TaskDetailPage() {
       setError("You don't have permission to delete this task");
       return;
     }
-    
     if (window.confirm("Are you sure you want to delete this task?")) {
       try {
         await API.delete(`/tasks/${id}`);
@@ -97,18 +85,25 @@ function TaskDetailPage() {
     }
   };
 
+  const handleStart = async () => {
+    try {
+      await API.patch(`/tasks/${id}/start?userId=${userId}`);
+      fetchTask();
+    } catch (err) {
+      setError("Failed to start task");
+      console.error(err);
+    }
+  };
+
   const handleComplete = async () => {
-    // Check if task is assigned to current user
     if (task.assignedTo && task.assignedTo.id != userId) {
       setError("You can only complete tasks assigned to you");
       return;
     }
-    
     if (task.status === "COMPLETED") {
       setError("Task is already completed");
       return;
     }
-    
     try {
       await API.patch(`/tasks/${id}/complete?userId=${userId}`);
       alert(`Task completed! You earned ${task.points} points!`);
@@ -119,25 +114,21 @@ function TaskDetailPage() {
     }
   };
 
-  if (loading) {
-    return <LoadingSpinner message="Loading task..." />;
-  }
-
+  if (loading) return <LoadingSpinner message="Loading task..." />;
   if (error) return <ErrorMessage message={error} onRetry={fetchTask} />;
-
-  if (!task) {
-    return <div>Task not found</div>;
-  }
+  if (!task) return <div>Task not found</div>;
 
   const isAssignedToMe = task.assignedTo && task.assignedTo.id == userId;
   const isCompleted = task.status === "COMPLETED";
+  const isPending = task.status === "PENDING";
+  const isInProgress = task.status === "IN_PROGRESS";
 
   return (
     <div className="task-detail-container">
-      <button className = "back-btn" onClick={() => navigate(-1)}>← Back</button>
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
 
       {isEditing ? (
-        <div className ="task-detail-card edit-form">
+        <div className="task-detail-card edit-form">
           <h1>Edit Task</h1>
           <form onSubmit={handleUpdate}>
             <div>
@@ -208,24 +199,29 @@ function TaskDetailPage() {
           </form>
         </div>
       ) : (
-        <div className = "task-detail-card">
+        <div className="task-detail-card">
           <h1>{task.title}</h1>
-          
-          {/* Complete button - shows for ANY user assigned to this task */}
-          {isAssignedToMe && !isCompleted && (
+
+          {/* Start button — only shows if assigned to me and status is PENDING */}
+          {isAssignedToMe && isPending && (
+            <button onClick={handleStart}>Start Task</button>
+          )}
+
+          {/* Complete button — only shows if assigned to me and IN_PROGRESS */}
+          {isAssignedToMe && isInProgress && (
             <button onClick={handleComplete}>Complete Task</button>
           )}
-          
+
           {/* Already completed message */}
           {isCompleted && (
             <p><strong>Status:</strong> COMPLETED ✓</p>
           )}
-          
+
           {/* Edit button - ONLY for MANAGER or ADMIN */}
           {canEdit && !isEditing && (
             <button onClick={() => setIsEditing(true)}>Edit Task</button>
           )}
-          
+
           {/* Delete button - ONLY for MANAGER or ADMIN */}
           {canDelete && (
             <button onClick={handleDelete}>Delete Task</button>

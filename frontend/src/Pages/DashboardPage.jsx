@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect } from "react";
-import { getCurrentUser } from "../Services/authService";
 import { useState } from "react";
 import API from "../Services/api";
 import TaskCard from "../Components/TaskCard";
@@ -37,21 +36,30 @@ function DashboardPage() {
         fetchData();
     }, []);
 
-        if (loading) {
-            return <LoadingSpinner />;
-        }
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     if (!user) {
         return <ErrorMessage message="Failed to load user data" />;
     }
 
+    const handleStart = async (taskId) => {
+        try {
+            const userId = localStorage.getItem("userId");
+            await API.patch(`/tasks/${taskId}/start?userId=${userId}`);
+            const res = await API.get(`/tasks/user/${userId}`);
+            setTasks(res.data);
+        } catch (err) {
+            console.error("Error starting task", err);
+        }
+    };
+
     const handleComplete = async (taskId) => {
         try {
             const userId = localStorage.getItem("userId");
-
             await completeTask(taskId, userId);
 
-            // refresh tasks
             const res = await API.get(`/tasks/user/${userId}`);
             setTasks(res.data);
 
@@ -62,7 +70,6 @@ function DashboardPage() {
             console.error("Error completing task", err);
         }
     };
-
 
     return (
         <div className="dashboard-container">
@@ -75,10 +82,11 @@ function DashboardPage() {
                     <Link
                         key={task.id}
                         to={`/tasks/${task.id}`}
-                        style={{ textDecoration: "none", color: "inherit" }} // Removes link styling
+                        style={{ textDecoration: "none", color: "inherit" }}
                     >
                         <TaskCard
                             task={task}
+                            onStart={handleStart}
                             onComplete={handleComplete}
                         />
                     </Link>
